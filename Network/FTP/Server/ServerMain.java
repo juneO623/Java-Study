@@ -3,11 +3,35 @@ package kr.hs.dgsw.network.test01.n2304.Server;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 
 public class ServerMain {
 
     static String ID = null;
     static String PW = null;
+    static Socket sc = null;
+
+    public void sendMsg(String str, Socket sc){
+        byte[] data = str.getBytes(StandardCharsets.UTF_8);
+        OutputStream os = null;
+        try {
+            os = sc.getOutputStream();
+            os.write(data);
+            os.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String receiveMsg(Socket sc) throws IOException{
+        InputStream is = sc.getInputStream();
+        byte[] bytes = new byte[1024];
+        int byteSiz = is.read(bytes);
+        return new String(bytes, 0, byteSiz);
+    }
+
+
 
     public static void main(String[] args) {
 
@@ -22,35 +46,29 @@ public class ServerMain {
         }
 
         System.out.println("접속 대기중 ~ ");
-
+        try {
+            sc = ssc.accept();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         while (true) {
             try {
-                Socket sc = ssc.accept();
-//                System.out.println("사용자 접속 했습니다");
-//                System.out.println("Client ip : " + sc.getInetAddress());
-
-                InputStream is = sc.getInputStream();
-                BufferedInputStream bis = new BufferedInputStream(is);
-                DataInputStream dis = new DataInputStream(bis);
-
-                OutputStream os = sc.getOutputStream();
-                BufferedOutputStream bos = new BufferedOutputStream(os);
-                DataOutputStream dos = new DataOutputStream(bos);
 
 
-                ID = dis.readUTF();
-                PW = dis.readUTF();
+                ID = sm.receiveMsg(sc);
+                PW = sm.receiveMsg(sc);
+
+                System.out.println(ID);
+                System.out.println(PW);
 
                 if (sm.login(ID, PW)){
-                    dos.writeUTF("Login Success");
-                    dos.flush();
+                    sm.sendMsg("Login Success", sc);
                     System.out.println("누군가 접속하였습니다.");
                     break;
                 }
                 else{
-                    dos.writeUTF("Login Fail");
-                    dos.flush();
-                    System.out.println("병신 한명 추가");
+                    sm.sendMsg("Login Fail", sc);
+                    System.out.println("로그인 실패");
                 }
             } catch (IOException e) {
                 e.printStackTrace();

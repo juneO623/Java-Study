@@ -1,40 +1,95 @@
 package kr.hs.dgsw.network.test01.n2304.Client;
 
-import kr.hs.dgsw.network.test01.n2304.Server.ServerMain;
-
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class ClientMain {
+
+    Socket sc = null;
+//    private final InputStream is = null;
+
+//    public void sendMsg(String str, Socket sc){
+//        byte[] data = str.getBytes(StandardCharsets.UTF_8);
+//        OutputStream os = null;
+//        try {
+//            os = sc.getOutputStream();
+//            os.write(data);
+//            os.flush();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public String receiveMsg(Socket sc) throws IOException{
+//        InputStream is = sc.getInputStream();
+//        byte[] bytes = new byte[1024];
+//        is.read(bytes);
+//        String str = new String(bytes, StandardCharsets.UTF_8);
+//        return str;
+//    }
+
+    // ----------------------
+
+//    public void sendMsg(String str, Socket sc) throws IOException {
+//        OutputStream os = sc.getOutputStream();
+////        BufferedOutputStream bos = new BufferedOutputStream(os);
+////        DataOutputStream dos = new DataOutputStream(bos);
+//        DataOutputStream dos = new DataOutputStream(os);
+//        dos.writeUTF(str);
+//        dos.flush();
+//    }
+//
+//    public String receiveMsg(Socket sc) throws IOException{
+//        InputStream is = sc.getInputStream();
+////        BufferedInputStream bis = new BufferedInputStream(is);
+//        DataInputStream dis = new DataInputStream(is);
+//
+//        return dis.readUTF();
+//    }
+
+    public void sendMsg(String str, Socket sc){
+        byte[] data = str.getBytes(StandardCharsets.UTF_8);
+        OutputStream os = null;
+        try {
+            os = sc.getOutputStream();
+            os.write(data);
+            os.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String receiveMsg(Socket sc) throws IOException{
+        InputStream is = sc.getInputStream();
+        byte[] bytes = new byte[1024];
+        int byteSiz = is.read(bytes);
+        return new String(bytes, 0, byteSiz);
+    }
 
     public static void main(String[] args) {
 
         String id = null;
         String pw = null;
-        String msg = null;
+        String msg;
 
         Scanner scanner = new Scanner(System.in);
+        ClientMain cm = new ClientMain();
 
         try {
             Socket sc = new Socket("127.0.0.1", 5000);
 
-            OutputStream os = sc.getOutputStream();
-            BufferedOutputStream bos = new BufferedOutputStream(os);
-            DataOutputStream dos = new DataOutputStream(bos);
-
-            InputStream is = sc.getInputStream();
-            BufferedInputStream bis = new BufferedInputStream(is);
-            DataInputStream dis = new DataInputStream(bis);
-
             while(true) {
+
                 System.out.print("ID: ");
-                dos.writeUTF(scanner.next());
-                dos.flush();
+                cm.sendMsg(scanner.next(), sc);
+
                 System.out.print("PASS: ");
-                dos.writeUTF(scanner.next());
-                dos.flush();
-                msg = dis.readUTF();
+                cm.sendMsg(scanner.next(), sc);
+
+                msg = cm.receiveMsg(sc);
+                System.out.println("시발");
                 System.out.println(msg);
                 if (msg.equals("Login Fail")){
                     System.out.println("** ID 또는 PASS가 틀렸습니다.! **");
