@@ -1,6 +1,9 @@
-package kr.hs.dgsw.network.test01.n2304.Client;
+package TTTest;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
@@ -68,6 +71,30 @@ public class ClientMain {
         return new String(bytes, 0, byteSiz);
     }
 
+    public String fileLengthConverter(long size){
+        String sizeStr;
+        if (size >= 1024 * 1024 * 1024){
+            size /= (1024 * 1024 * 1024);
+            sizeStr = String.valueOf(size) + "G";
+        } else if (size >= 1024 * 1024){
+            size /= (1024 * 1024);
+            sizeStr = String.valueOf(size) + "M";
+        } else if ( size >= 1024){
+            size /= 1024;
+            sizeStr = String.valueOf(size) + "K";
+        } else {
+            sizeStr = String.valueOf(size);
+        }
+        return  sizeStr;
+    }
+
+    public void showFileList(File file){
+        System.out.print("- " + file.getName() + "  ");
+        System.out.print(fileLengthConverter(file.length()));
+        System.out.println();
+    }
+
+
     public static void main(String[] args) {
 
         String id = null;
@@ -89,8 +116,7 @@ public class ClientMain {
                 cm.sendMsg(scanner.next(), sc);
 
                 msg = cm.receiveMsg(sc);
-                System.out.println("시발");
-                System.out.println(msg);
+//                System.out.println(msg);
                 if (msg.equals("Login Fail")){
                     System.out.println("** ID 또는 PASS가 틀렸습니다.! **");
                 }
@@ -99,6 +125,33 @@ public class ClientMain {
                 }
             }
             System.out.println("** FTP 서버에 접속하였습니다. **");
+
+
+            String fileDirectory = "D:\\FTP_Storage";
+            File dir = new File(fileDirectory);
+
+
+            while(true){
+
+                String commandLine = scanner.nextLine();
+                String command = commandLine.split(" ", 2)[0];
+//                String command_O = commandLine.split(" ", 2)[1];
+
+                switch(command){
+                    case "/파일목록":
+                        for (File fileList : dir.listFiles()){
+                            cm.showFileList(fileList);
+                        }
+                        break;
+                    default:
+                        System.out.println("없는 명령어 입니다.");
+                        break;
+                }
+
+                if (commandLine.equals("/접속종료")){
+                    break;
+                }
+            }
 
 
 //            LoginClient login = new LoginClient(sc);

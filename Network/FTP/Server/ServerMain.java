@@ -1,10 +1,11 @@
-package kr.hs.dgsw.network.test01.n2304.Server;
+package TTTest;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
 
 public class ServerMain {
 
@@ -58,8 +59,8 @@ public class ServerMain {
                 ID = sm.receiveMsg(sc);
                 PW = sm.receiveMsg(sc);
 
-                System.out.println(ID);
-                System.out.println(PW);
+//                System.out.println(ID);
+//                System.out.println(PW);
 
                 if (sm.login(ID, PW)){
                     sm.sendMsg("Login Success", sc);
@@ -75,6 +76,14 @@ public class ServerMain {
             }
         }
         System.out.println("로그인에 성공했습니다.");
+        while(true){
+            try {
+                Thread.sleep(5000);
+                System.out.println("hello");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public boolean login(String ID, String PW){

@@ -1,4 +1,4 @@
-package kr.hs.dgsw.network.test01.n2304.Server;
+package TTTest;
 
 public class ServerThread implements Runnable {
 
