@@ -100,6 +100,7 @@ public class ClientMain {
         String id = null;
         String pw = null;
         String msg;
+        String fileData;
 
         Scanner scanner = new Scanner(System.in);
         ClientMain cm = new ClientMain();
@@ -134,23 +135,41 @@ public class ClientMain {
             while(true){
 
                 String commandLine = scanner.nextLine();
+                cm.sendMsg(commandLine, sc);
                 String command = commandLine.split(" ", 2)[0];
 //                String command_O = commandLine.split(" ", 2)[1];
 
+
                 switch(command){
                     case "/파일목록":
-                        for (File fileList : dir.listFiles()){
-                            cm.showFileList(fileList);
+//                        for (File fileList : dir.listFiles()){
+//                            cm.showFileList(fileList);
+//                        }
+                        fileData = cm.receiveMsg(sc);
+//                        System.out.println(fileData);
+//                        System.out.println("---------------");
+                        String[] DataList = fileData.split("\n,");
+                        for (String datalist : DataList){
+                            System.out.print("- " + datalist.split("%")[0] + " ");
+                            System.out.println(datalist.split("%")[1]);
                         }
                         break;
+                    case "/접속종료":
+                        return;
+//                    case "\n":
+//                        System.out.println("엔터입니다");
+//                        break;
+//                    case "\0":
+//                        System.out.println("널입니다");
+//                        break;
                     default:
                         System.out.println("없는 명령어 입니다.");
                         break;
                 }
 
-                if (commandLine.equals("/접속종료")){
-                    break;
-                }
+//                if (commandLine.equals("/접속종료")){
+//                    break;
+//                }
             }
 
 
