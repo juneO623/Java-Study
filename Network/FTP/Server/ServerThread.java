@@ -106,6 +106,7 @@ public class ServerThread extends Thread {
                 System.out.println(ip + " 님이 [DOWNLOAD] 명령어를 실행하였습니다.");
                 break;
             }
+
             default: {
                 serverMain.sendDefault(sc.getInetAddress(), "알 수 없는 명령어입니다.");
             }

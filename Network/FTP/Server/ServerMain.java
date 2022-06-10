@@ -81,6 +81,13 @@ public class ServerMain {
         } catch (IOException e) { }
     }
 
+    void downLoadResult(InetAddress ip, String msg){
+        dos = (DataOutputStream) clients.get(ip);
+        try{
+            dos.writeUTF("[DOWNLOAD]!!" + msg);
+        } catch (IOException e){ }
+    }
+
     public static void main(String[] args) throws IOException {
         new ServerMain().serverStart();
     }
