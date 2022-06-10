@@ -1,179 +1,87 @@
-package TTTest;
+package kr.hs.dgsw.network.test01.n2304.server;
 
-import java.io.File;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.Objects;
+import java.util.Collections;
+import java.util.HashMap;
 
 public class ServerMain {
 
-    static String ID = null;
-    static String PW = null;
-    static Socket sc = null;
-    static String sendFileData = "";
-    static String commandLine;
-    static String command;
-    static String command_O;
+    HashMap clients;
+    DataOutputStream dos;
 
-    public void sendMsg(String str, Socket sc){
-        byte[] data = str.getBytes(StandardCharsets.UTF_8);
-        OutputStream os = null;
+    ServerMain() {
+        clients = new HashMap();
+        Collections.synchronizedMap(clients);
+    }
+
+
+    public void serverStart() {
+        ServerSocket serverSocket = null;
+        Socket socket = null;
+
         try {
-            os = sc.getOutputStream();
-            os.write(data);
-            os.flush();
-        } catch (IOException e) {
+            serverSocket = new ServerSocket(5000);
+            System.out.println("서버 시작");
+
+            while (true) {
+                socket = serverSocket.accept();
+                System.out.println(socket.getInetAddress() + "에서 접속하였습니다.");
+                ServerThread serverThread = new ServerThread(socket);
+                serverThread.start();
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public String receiveMsg(Socket sc) throws IOException{
-        InputStream is = sc.getInputStream();
-        byte[] bytes = new byte[1024];
-        int byteSiz = is.read(bytes);
-        return new String(bytes, 0, byteSiz);
+    void sendDefault(InetAddress ip, String message) {
+        dos = (DataOutputStream) clients.get(ip);
+        try {
+            dos.writeUTF(message);
+        } catch (IOException e) { }
     }
 
+    void sendLoginResult(InetAddress ip, String id, String pw) {
+        dos = (DataOutputStream) clients.get(ip);
 
-    public String fileLengthConverter(long size){
-        String sizeStr;
-        if (size >= 1024 * 1024 * 1024){
-            size /= (1024 * 1024 * 1024);
-            sizeStr = String.valueOf(size) + "G";
-        } else if (size >= 1024 * 1024){
-            size /= (1024 * 1024);
-            sizeStr = String.valueOf(size) + "M";
-        } else if ( size >= 1024){
-            size /= 1024;
-            sizeStr = String.valueOf(size) + "K";
-        } else {
-            sizeStr = String.valueOf(size);
-        }
-        return  sizeStr;
+        try {
+            if (id.equals("admin") && pw.equals("1234")) {
+                dos.writeUTF("[LOGIN]!!" + "SUCCESS");
+                System.out.println(ip + " 님이 로그인에 성공하였습니다.");
+            } else {
+                dos.writeUTF("[LOGIN]!!" + "FAIL");
+            }
+        } catch (IOException e) { }
     }
 
-    public String combineSendFileList(File file){
-        String fileData = "";
-
-        fileData += String.format("%s", file.getName() + "%");
-        fileData += String.format("%s\n,", fileLengthConverter(file.length()));
-
-
-//        System.out.print("- " + file.getName() + "  ");
-//        System.out.print(fileLengthConverter(file.length()));
-//        System.out.println();
-
-        return fileData;
+    void sendFileList(InetAddress ip, String fileName, String fileSize, Boolean isFileExist) {
+        dos = (DataOutputStream) clients.get(ip);
+        try {
+            if (isFileExist)
+                dos.writeUTF("[FILE_LIST]!!" +
+                        "[EXIST]!!" +
+                        fileName +
+                        "!!" +
+                        fileSize
+                );
+            else {
+                dos.writeUTF("[FILE_LIST]!!" + "[UNEXIST]");
+            }
+        } catch (IOException e) { }
     }
 
+    void uploadResult(InetAddress ip, String msg){
+        dos = (DataOutputStream) clients.get(ip);
+        try {
+            dos.writeUTF("[UPLOAD]!!+" + msg);
+        } catch (IOException e) { }
+    }
 
     public static void main(String[] args) throws IOException {
-
-        ServerSocket ssc = null;
-
-        ServerMain sm = new ServerMain();
-
-        String fileDirectory = "D:\\FTP_Storage";
-        File dir = new File(fileDirectory);
-
-        try {
-            ssc = new ServerSocket(5000);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("접속 대기중 ~ (1: 파일목록, 2: 업로드, 3: 다운로드, 4: 접속종료");
-        try {
-            sc = ssc.accept();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        while (true) {
-            try {
-
-
-                ID = sm.receiveMsg(sc);
-                PW = sm.receiveMsg(sc);
-
-//                System.out.println(ID);
-//                System.out.println(PW);
-
-                if (sm.login(ID, PW)){
-                    sm.sendMsg("Login Success", sc);
-                    System.out.println("누군가 접속하였습니다.");
-                    break;
-                }
-                else{
-                    sm.sendMsg("Login Fail", sc);
-                    System.out.println("로그인 실패");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println("로그인에 성공했습니다.");
-
-        try {
-            commandLine = sm.receiveMsg(sc);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-//        System.out.println(commandLine);
-
-        if (!commandLine.contains(" ")){     // (commandLine.indexOf(" ") != -1)
-                command = commandLine;
-        }
-        else {
-            command = commandLine.split(" ", 2)[0];
-            command_O = commandLine.split(" ", 2)[1];
-        }
-
-//        System.out.println("1- " + command);
-//        System.out.println("2- " + command_O);
-
-        switch (command){
-            case "/파일목록":
-                for (File fileList : Objects.requireNonNull(dir.listFiles())){
-//                    sm.sendMsg(fileList.getName() + "  " +  Files.size(fileList.toPath()), sc);
-                    sendFileData += sm.combineSendFileList(fileList);
-                }
-                sm.sendMsg(sendFileData, sc);
-
-                System.out.printf("%s - 1\n", sc.getInetAddress());
-                break;
-        }
-
-
-
-
-//        System.out.println(sendFileData);
-//        sm.sendMsg(sendFileData, sc);
-
-
-
-
-
-        while(true){
-
-
-//            try {
-//                Thread.sleep(5000);
-//                System.out.println("hello");
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-        }
+        new ServerMain().serverStart();
     }
-
-    public boolean login(String ID, String PW){
-        return ID.equals("admin") && PW.equals("1234");
-    }
-
-
-
 }
