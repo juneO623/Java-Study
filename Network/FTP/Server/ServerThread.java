@@ -103,6 +103,7 @@ public class ServerThread extends Thread {
                     dos.write(bytes, 0, readBit);
                 }
                 fis.close();
+                System.out.println(ip + " 님이 [DOWNLOAD] 명령어를 실행하였습니다.");
                 break;
             }
             default: {

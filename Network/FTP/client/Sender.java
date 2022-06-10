@@ -87,8 +87,6 @@ public class Sender extends Thread {
                 else {
                     dos.writeUTF("[DOWNLOAD]!!" + commands[1]);
                 }
-
-
                 break;
             }
             case "/exit": {
