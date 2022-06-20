@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class Main {
 
     static String command;
-    static File phoneList = new File("D:\\PhoneNumberBook\\PhoneList.txt");
+    static File phoneList = new File("C:\\Users\\DGSW\\IdeaProjects\\PhoneNumberBook\\src\\PhoneList.txt");
     static BufferedWriter bw;
     static BufferedReader br;
 
@@ -25,13 +25,11 @@ public class Main {
             phoneList.createNewFile();
         }
 
-        br = new BufferedReader(new FileReader(phoneList));
-
         while(true) {
-            System.out.println("------- 명령어 리스트 -------");
-            System.out.println("- /등록,  -");
-            System.out.println("---------------------------");
-            System.out.println("명령어를 입력해주세요");
+            System.out.println("------- 명령어 리스트 --------");
+            System.out.println("- /등록, /검색, /삭제 , /종료 -");
+            System.out.println("----------------------------");
+            System.out.println("명령어를 입력해주세요.");
             command = sc.nextLine();
 
             switch (command) {
@@ -40,13 +38,15 @@ public class Main {
                     break;
                 }
 
+                case "/검색":{
+                    new Search().Search();
+                    break;
+                }
+
                 case "/종료":{
                     System.exit(0);
                 }
             }
-
         }
-
     }
-
 }
