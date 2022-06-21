@@ -26,27 +26,60 @@ public class Main {
         }
 
         while(true) {
-            System.out.println("------- 명령어 리스트 --------");
-            System.out.println("- /등록, /검색, /삭제 , /종료 -");
-            System.out.println("----------------------------");
+            System.out.println("┌───────── 명령어 리스트 ──────────┐");
+            System.out.println("│ /등록, /검색, /삭제, /목록, /종료  │");
+            System.out.println("└────────────────────────────────┘");
             System.out.println("명령어를 입력해주세요.");
             command = sc.nextLine();
 
-            switch (command) {
-                case "/등록":{
-                    new Registration().register();
-                    break;
-                }
-
-                case "/검색":{
-                    new Search().Search();
-                    break;
-                }
-
-                case "/종료":{
-                    System.exit(0);
-                }
+            if (command.startsWith("/등록")){
+                new Registration().register();
+            } else if (command.startsWith("/검색")){
+                new Search().search();
+            } else if (command.startsWith("/삭제")){
+                new Remove().remove();
+            } else if (command.startsWith("/목록")){
+                new Read().read();
+            } else if (command.startsWith("/종료")){
+                System.exit(0);
+            } else {
+                System.out.println("잘못된 명령어 입니다.");
+                System.out.println("명령어 리스트를 보고 올바르게 입력해주세요.");
+                System.out.println();
             }
+
+//            switch (command) {
+//                case "/등록":{
+//                    new Registration().register();
+//                    break;
+//                }
+//
+//                case "/검색":{
+//                    new Search().search();
+//                    break;
+//                }
+//
+//                case "/삭제":{
+//                    new Remove().remove();
+//                    break;
+//                }
+//
+//                case "/목록":{
+//                    new Read().read();
+//                    break;
+//                }
+//
+//                case "/종료":{
+//                    System.exit(0);
+//                }
+//
+//                default:{
+//                    System.out.println("잘못된 명령어 입니다.");
+//                    System.out.println("명령어 리스트를 보고 올바르게 입력해주세요.");
+//                    System.out.println();
+//                    break;
+//                }
+//            }
         }
     }
 }

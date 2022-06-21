@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Scanner;
 
@@ -15,7 +14,7 @@ public class Search extends Main {
     private String str;
     private int flag = 0;
 
-    public void Search() throws IOException {
+    public void search() throws IOException {
 
         br = new BufferedReader(new FileReader(phoneList));
 
