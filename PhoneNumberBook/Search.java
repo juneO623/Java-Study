@@ -3,19 +3,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Scanner;
 
-public class Search extends Main {
-
-    Scanner sc = new Scanner(System.in);
+public class Search extends Command {
 
     private String list;
     private ArrayList newList = new ArrayList();
     private String str;
     private int flag = 0;
 
-    public void search() throws IOException {
-
+    @Override
+    protected void CommandExecute() throws IOException {
         br = new BufferedReader(new FileReader(phoneList));
 
         System.out.println("검색할 이름이나 전화번호의 일부를 입력하세요.");
@@ -41,5 +38,4 @@ public class Search extends Main {
         System.out.println();
 
     }
-
 }

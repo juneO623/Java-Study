@@ -3,17 +3,18 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Scanner;
 
-public class Read extends Main {
-
-    Scanner sc = new Scanner(System.in);
+public class Read extends Command {
 
     ArrayList<String> sortList = new ArrayList<String>();
     String list;
 
-    void read() throws IOException {
+    public Read() throws IOException {
         br = new BufferedReader(new FileReader(phoneList));
+    }
+
+    @Override
+    protected void CommandExecute() throws IOException {
 
         while ((list = br.readLine()) != null) {
             sortList.add(list);
@@ -28,5 +29,4 @@ public class Read extends Main {
         System.out.println("───────────────────────────");
         System.out.println();
     }
-
 }
