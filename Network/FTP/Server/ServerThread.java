@@ -72,13 +72,23 @@ public class ServerThread extends Thread {
             case "[UPLOAD]": {
                 FileOutputStream fos = new FileOutputStream(fileDirectory + "\\" + commands[1]);
 
+                long size = dis.readLong();
+
                 byte[] bytes = new byte[1024];
                 int readBit = 0;
+//                while (true) {
+//                    readBit = dis.read(bytes);
+//                    fos.write(bytes, 0, readBit);
+//                    if (readBit != 1024)
+//                        break;
+//                }
                 while (true) {
                     readBit = dis.read(bytes);
                     fos.write(bytes, 0, readBit);
-                    if (readBit != 1024)
+                    size -= readBit;
+                    if (size <= 0) {
                         break;
+                    }
                 }
                 fos.close();
 
@@ -89,6 +99,10 @@ public class ServerThread extends Thread {
             }
             case "[DOWNLOAD]": {
                 FileInputStream fis = null;
+
+                String filePath = fileDirectory + "\\" + commands[1];
+                dos.writeLong(filePath.length());
+
                 try {
                     fis = new FileInputStream(fileDirectory + "\\" + commands[1]);
                 } catch (FileNotFoundException fe) {

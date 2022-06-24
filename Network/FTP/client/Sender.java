@@ -101,6 +101,8 @@ public class Sender extends Thread {
     private void sendFile(File file) throws IOException {
         FileInputStream fis = new FileInputStream(file);
 
+        dos.writeLong(file.length());
+
         byte[] bytes = new byte[1024];
         int readBit = 0;
         while ((readBit = fis.read(bytes)) != -1) {

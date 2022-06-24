@@ -68,13 +68,23 @@ public class Receiver extends Thread {
     private void receiveFile(File file) throws IOException {
         FileOutputStream fos = new FileOutputStream(file);
 
+        long size = dis.readLong();
+
         byte[] bytes = new byte[1024];
         int readBit = 0;
-        while(true){
+//        while(true){
+//            readBit = dis.read(bytes);
+//            fos.write(bytes, 0, readBit);
+//            if (readBit != 1024)
+//                break;
+//        }
+        while (true) {
             readBit = dis.read(bytes);
             fos.write(bytes, 0, readBit);
-            if (readBit != 1024)
+            size -= readBit;
+            if (size <= 0) {
                 break;
+            }
         }
         System.out.println("파일 다운로드가 완료되었습니다.");
         fos.close();
