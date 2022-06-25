@@ -32,14 +32,14 @@ public class CommandLs extends AbstractCommand {
 
 	public String byteConverter(long fileLength){
 		String lengthStr;
-		if (fileLength >= (1000 * 1000 * 1000)){
-			fileLength /= (1000 * 1000 * 1000);
+		if (fileLength >= (1024 * 1024 * 1024)){
+			fileLength /= (1024 * 1024 * 1024);
 			lengthStr = String.valueOf(fileLength) + "G";
-		} else if (fileLength >= (1000 * 1000)) {
-			fileLength /= (1000 * 1000);
+		} else if (fileLength >= (1024 * 1024)) {
+			fileLength /= (1024 * 1024);
 			lengthStr = String.valueOf(fileLength) + "M";
-		} else if (fileLength >= 1000) {
-			fileLength /= 1000;
+		} else if (fileLength >= 1024) {
+			fileLength /= 1024;
 			lengthStr = String.valueOf(fileLength) + "K";
 		} else{
 			lengthStr = String.valueOf(fileLength);
