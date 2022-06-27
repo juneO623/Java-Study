@@ -23,9 +23,9 @@ public class SearchExecutor {
         System.out.println("찾을 값을 (정수로) 입력하세요.");
         int value = scanner.nextInt();
 
-//        for (int a : array) {
-//            System.out.println(a);
-//        }
+        for (int a : array) {
+            System.out.println(a);
+        }
 
         BinarySearch bSearch = new BinarySearch();
         int index = bSearch.search(array, value);
