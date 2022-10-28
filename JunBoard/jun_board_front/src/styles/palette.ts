@@ -143,5 +143,5 @@ export const palette = {
   gray,
   white,
   black,
-  main: "#03c75a",
+  main: "#edb72b",
 };

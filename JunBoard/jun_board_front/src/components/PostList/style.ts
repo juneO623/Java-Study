@@ -1,8 +1,13 @@
 import styled from "styled-components";
 
-export const PostListWrap = styled.div`
+export const Wrap = styled.div`
   width: 100%;
   height: 100vh;
-  padding: 100px;
-  font-size: 40px;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const PostListWrap = styled.div`
+  width: 100%;
+  height: 100%;
 `;
