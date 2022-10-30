@@ -18,7 +18,7 @@ export const NavBarWrap = styled.div`
   justify-content: space-between;
   box-sizing: border-box;
   gap: 30px;
-  padding-left: 50px;
+  /* padding-left: 50px; */
 `;
 
 export const TitleAndLogoWrap = styled.div`
@@ -26,6 +26,10 @@ export const TitleAndLogoWrap = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  gap: 5px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const NavItemWrap = styled.span`
@@ -42,4 +46,7 @@ export const RegisterButton = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 30px;
+  &:hover {
+    cursor: pointer;
+  }
 `;

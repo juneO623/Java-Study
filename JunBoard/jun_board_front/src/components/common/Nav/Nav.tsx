@@ -7,13 +7,17 @@ const Nav = () => {
   return (
     <S.NavBarBackgroundWrap>
       <S.NavBarWrap>
-        <S.TitleAndLogoWrap>
+        <S.TitleAndLogoWrap
+          onClick={() => {
+            navigator("/");
+          }}
+        >
           <TfiClipboard style={{ fontSize: "1.5rem", color: "white" }} />
-          <S.NavItemWrap>목록</S.NavItemWrap>
+          <S.NavItemWrap>JOARD</S.NavItemWrap>
         </S.TitleAndLogoWrap>
         <S.RegisterButton
           onClick={() => {
-            navigator("/register");
+            navigator("/write");
           }}
         >
           등록
