@@ -1,9 +1,6 @@
 package com.example.jun_board.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -13,6 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor  // 매개변수 없는 생성자
 public class Post {
 
     @Id
@@ -20,11 +18,21 @@ public class Post {
     @Column(name = "id", nullable = false)
     private long id;
 
+    @Builder
+    public Post(String writter, String title, String content){
+        this.writter = writter;
+        this.title = title;
+        this.content = content;
+        this.viewCount = 0;
+    }
+
     private String writter;
     private String title;
     private String content;
 
     @CreationTimestamp
     private LocalDateTime wdate;    // 작성일자
+
+    private int viewCount;
 
 }
