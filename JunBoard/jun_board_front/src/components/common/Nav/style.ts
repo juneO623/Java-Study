@@ -39,7 +39,7 @@ export const NavItemWrap = styled.span`
 
 export const RegisterButton = styled.div`
   height: 30%;
-  padding: 8px 13px;
+  padding: 15px 13px;
   color: ${palette.main};
   background-color: ${palette.white};
   display: flex;
@@ -49,4 +49,19 @@ export const RegisterButton = styled.div`
   &:hover {
     cursor: pointer;
   }
+`;
+
+export const LogInSignUpBtnWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 30px;
+  padding: 0 10px;
+`;
+
+export const LogInSignUpBtn = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
 `;
